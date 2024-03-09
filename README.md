@@ -19,4 +19,7 @@ f. Create or modify your .env file with
 ````
 GOOGLE_APPLICATION_CREDENTIALS="/credentials/<keyfile_name>.json"
 ````
-f. Set the environment variable GOOGLE_APPLICATION_CREDENTIALS to point to the JSON key file you downloaded. You can do this in your terminal:
+### Create the GCP bucket for the raw data
+
+Create a bucket for the raw data named "<prefix>-farm-screener-raw"
+TODO: Do this with Terraform
