@@ -46,15 +46,43 @@ def get_offer_df():
     )
     return offers_df
 
+
 df = get_offer_df()
-st.dataframe(df)
-st.write("---")
+# st.dataframe(df)if 'sbstate' not in st.session_state:
+
+# Start with collapsed sidebar (TODO: Does not work yet)
+if "sbstate" not in st.session_state:
+    st.session_state.sbstate = "collapsed"
+
+
+st.header("Swiss Farmers´ Direct Selling Offers")
+# # Add a slider to the sidebar:
+# add_slider = st.sidebar.slider("Select a range of values", 0.0, 100.0, (25.0, 75.0))
+st.sidebar.header("Settings")
+n_largest = st.sidebar.slider("Number of Bars to Display", 0, 30, 10)
+
+column_config = {
+    "product_name": st.column_config.TextColumn(
+        "Product",
+        help="Streamlit **widget** commands 🎈",
+        default=None,
+        max_chars=50,
+        width="medium",
+        # validate="^st\.[a-z_]+$",
+    )
+}
 
 # offer_counts = df.groupby(by=["product_name"]).count()
-offer_counts = df.product_name.value_counts().reset_index().rename(columns={"index": "value", 0: "count"})
-st.dataframe(offer_counts)
-offers_sorted = offer_counts.nlargest(20, "count").sort_values(
-    by="count", ascending=False
+offer_counts = (
+    df.product_name.value_counts()
+    .reset_index()
+    .rename(columns={"index": "value", 0: "count"})
+)
+offer_counts["rank"] = offer_counts["count"].rank(method="first", ascending=False)
+st.dataframe(offer_counts, column_config=column_config, hide_index=True)
+
+offers_sorted = offer_counts.nlargest(n_largest, "count").sort_values(
+    by=["count", "product_name"], ascending=False
 )
 
 offer_counts_copy = offer_counts.copy()
@@ -67,6 +95,12 @@ fig = px.pie(
     names="product_name",
     title="Distribution of Product Offers Based on All Offers",
 )
+fig.update_traces(
+    textposition="inside",
+    textinfo="percent",
+
+)  # "percent+label"
+fig.update_layout(uniformtext_minsize=12, uniformtext_mode="hide")
 st.plotly_chart(fig, theme=None)
 
 col1, col2, col3 = st.columns(3)
@@ -79,23 +113,48 @@ with col2:
     st.metric(label="Number of Products", value=len(df.product_name.unique()))
 
 with col3:
-    st.metric(label=
-              "Number of Unique Product Offers", 
-              value=len(offer_counts.loc[offer_counts["count"] == 1]))
+    st.metric(
+        label="Number of Unique Product Offers",
+        value=len(offer_counts.loc[offer_counts["count"] == 1]),
+    )
 
 
 st.divider()
 
-tab1, tab2, tab3 = st.tabs(["Streamlit default plot", "Plotly express plot", "Unique Product Offers"])
+tab1, tab2, tab3 = st.tabs(
+    [
+        "Most Common Product Offers",
+        "Least Common Product Offers",
+        "Unique Product Offers",
+    ]
+)
+
 with tab1:
-    st.bar_chart(offers_sorted, x="product_name", y="count")#, color="col3")
+    fig = px.bar(
+        offers_sorted,
+        x="product_name",
+        y="count",
+        title="Most Common Product Offers",
+    )
+    fig.update_layout(xaxis_title="Product", yaxis_title="Count")
+    st.plotly_chart(fig, theme="streamlit")
 with tab2:
-    fig = px.bar(offers_sorted, x="product_name", y="count")
+    offers_sorted_smallest = offer_counts.nsmallest(n_largest, "count").sort_values(
+        by=["count", "product_name"], ascending=False
+    )
+    fig = px.bar(
+        offers_sorted_smallest,
+        x="product_name",
+        y="count",
+        title="Least Common Product Offers",
+    )
+    fig.update_layout(xaxis_title="Product", yaxis_title="Count")
     st.plotly_chart(fig, theme="streamlit")
 with tab3:
     fig = px.bar(
         offer_counts.loc[offer_counts["count"] == 1], x="product_name", y="count"
     )
+    fig.update_layout(xaxis_title="Product", yaxis_title="Count")
     st.plotly_chart(fig, theme="streamlit")
 
 # 'st.write("This is an interactive table")
@@ -128,8 +187,6 @@ option = st.selectbox("Which number do you like best?", df["product_name"].uniqu
 #     "How would you like to be contacted?", ("Email", "Home phone", "Mobile phone")
 # )
 
-# # Add a slider to the sidebar:
-# add_slider = st.sidebar.slider("Select a range of values", 0.0, 100.0, (25.0, 75.0))
 
 # st.write("Explore the mapping function:")
 
