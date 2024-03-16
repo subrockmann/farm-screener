@@ -1,5 +1,8 @@
 jupyter
 google-cloud-storage
+google-cloud-bigquery
+pandas_gbq
 python-dotenv
 pyarrow
 streamlit
+plotly
