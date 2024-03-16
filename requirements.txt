@@ -1,4 +1,6 @@
 jupyter
+numpy
+pandas
 google-cloud-storage
 google-cloud-bigquery
 pandas_gbq
