@@ -23,3 +23,11 @@ GOOGLE_APPLICATION_CREDENTIALS="/credentials/<keyfile_name>.json"
 
 Create a bucket for the raw data named "<prefix>-farm-screener-raw"
 TODO: Do this with Terraform
+
+
+## Running the streamlit application
+```
+python -m streamlit run app.py
+```
+
+To stop the Streamlit server, press Ctrl+C in the terminal.
