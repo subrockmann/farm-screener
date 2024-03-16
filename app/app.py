@@ -8,6 +8,14 @@ from google.oauth2 import service_account
 from google.cloud import bigquery
 
 
+st.set_page_config(
+    page_title=None,
+    page_icon=None,
+    layout="centered",
+    initial_sidebar_state="collapsed",  # "auto"
+    menu_items=None,
+)
+
 # Setup the data connection
 
 # Create API client.
@@ -50,10 +58,6 @@ def get_offer_df():
 df = get_offer_df()
 # st.dataframe(df)if 'sbstate' not in st.session_state:
 
-# Start with collapsed sidebar (TODO: Does not work yet)
-if "sbstate" not in st.session_state:
-    st.session_state.sbstate = "collapsed"
-
 
 st.header("Swiss Farmers´ Direct Selling Offers")
 # # Add a slider to the sidebar:
@@ -79,7 +83,7 @@ offer_counts = (
     .rename(columns={"index": "value", 0: "count"})
 )
 offer_counts["rank"] = offer_counts["count"].rank(method="first", ascending=False)
-st.dataframe(offer_counts, column_config=column_config, hide_index=True)
+
 
 offers_sorted = offer_counts.nlargest(n_largest, "count").sort_values(
     by=["count", "product_name"], ascending=False
@@ -159,6 +163,9 @@ with tab3:
 
 # 'st.write("This is an interactive table")
 # st.dataframe(df.style.highlight_max(axis=0))'
+
+st.dataframe(offer_counts, column_config=column_config, hide_index=True)
+
 
 option = st.selectbox("Which number do you like best?", df["product_name"].unique())
 
