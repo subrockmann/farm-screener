@@ -4,9 +4,12 @@ import time
 import pandas as pd
 import pandas_gbq
 import plotly.express as px
+import folium
 from google.oauth2 import service_account
 from google.cloud import bigquery
 
+
+MAP_CENTER = (47.391, 9.103014)
 
 st.set_page_config(
     page_title=None,
@@ -55,9 +58,20 @@ def get_offer_df():
     return offers_df
 
 
-df = get_offer_df()
-# st.dataframe(df)if 'sbstate' not in st.session_state:
+@st.cache_data(ttl=6000)
+def get_farms_df():
+    query = "SELECT * FROM `farm-screener.farm_screener.farms`"
 
+    df = pandas_gbq.read_gbq(
+        query, project_id=credentials.project_id, credentials=credentials
+    )
+    return df
+
+
+df = get_offer_df()
+farms_df = get_farms_df()
+
+#####################################
 
 st.header("Swiss Farmers´ Direct Selling Offers")
 # # Add a slider to the sidebar:
@@ -102,7 +116,6 @@ fig = px.pie(
 fig.update_traces(
     textposition="inside",
     textinfo="percent",
-
 )  # "percent+label"
 fig.update_layout(uniformtext_minsize=12, uniformtext_mode="hide")
 st.plotly_chart(fig, theme=None)
