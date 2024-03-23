@@ -304,4 +304,27 @@ for i, row in filtered_df.iterrows():
 
 st_folium_map = st_folium(map, width=725)
 
-st.dataframe(filtered_df, hide_index=True)
+
+column_config_farms = {
+    "product_name": st.column_config.TextColumn(
+        "Product",
+        help="Streamlit **widget** commands 🎈",
+        default=None,
+        max_chars=50,
+        width="medium",
+        # validate="^st\.[a-z_]+$",
+    )
+}
+
+
+display_columns = [
+    "farm_name",
+    "street",
+    "zip",
+    "city",
+    "canton",
+    "telephone",
+    "websitehttp://www.vb-hof.ch",
+]
+
+st.dataframe(filtered_df[display_columns], column_config=column_config_farms, hide_index=True)
