@@ -19,10 +19,18 @@ f. Create or modify your .env file with
 ````
 GOOGLE_APPLICATION_CREDENTIALS="/credentials/<keyfile_name>.json"
 ````
-### Create the GCP bucket for the raw data
+### Create the GCP infrastructure
 
-Create a bucket for the raw data named "<prefix>-farm-screener-raw"
-TODO: Do this with Terraform
+From inside the terraform folder to create the infrastructure run:
+
+```
+terraform apply
+```
+To remove the infrastructure run:
+
+```
+terraform destroy
+```
 
 
 ## Running the streamlit application
@@ -31,3 +39,7 @@ python -m streamlit run app.py
 ```
 
 To stop the Streamlit server, press Ctrl+C in the terminal.
+
+## Checking the live app
+You can check out this appliaction live at:  
+ https://subrockmann-farm-screener-appapp-f8nbec.streamlit.app/
