@@ -8,3 +8,5 @@ python-dotenv
 pyarrow
 streamlit
 plotly
+geopy
+streamlit-folium
