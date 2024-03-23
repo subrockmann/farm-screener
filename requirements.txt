@@ -9,4 +9,5 @@ pyarrow
 streamlit
 plotly
 geopy
+folium
 streamlit-folium
