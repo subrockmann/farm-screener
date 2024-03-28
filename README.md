@@ -1,6 +1,6 @@
 # farm-screener
 ## Overview
-This project collects data from Swiss farms and helps the user to find direct selling farms in their vicinity by displaying the farms on a map. Due to the fact that the collected data is in German, 
+This project collects data from Swiss farms and helps the user to find direct selling farms in their vicinity by displaying the farms on a map. Due to the fact that the collected data is in German, the app is currently a mix of German (data) and English (interface).
 
 ## Checking the live app
 You can check out this appliaction live at:  
