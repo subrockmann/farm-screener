@@ -9,36 +9,7 @@ from streamlit_folium import st_folium
 from google.oauth2 import service_account
 from google.cloud import bigquery
 from data import get_farms_df, get_offer_df, get_merged_df
-
-
-cantons = [
-    "AG",
-    "AI",
-    "AR",
-    "BE",
-    "BL",
-    "BS",
-    "FR",
-    "GE",
-    "GL",
-    "GR",
-    "JU",
-    "LU",
-    "NE",
-    "NW",
-    "OW",
-    "SG",
-    "SH",
-    "SZ",
-    "SO",
-    "TG",
-    "TI",
-    "UR",
-    "VS",
-    "VD",
-    "ZG",
-    "ZH",
-]
+from data import cantons
 
 
 df = get_offer_df()
@@ -65,9 +36,12 @@ column_config = {
     )
 }
 
+product_list = df["product_name"].unique()
+sorted_product_list = sorted(product_list)
+
 col4, col5 = st.columns(2)
 with col4:
-    product_selection = st.selectbox("Select your desired product", df["product_name"].unique())
+    product_selection = st.selectbox("Select your desired product", sorted_product_list)
 
 with col5:
     cantons_all = ["ALL"]
@@ -84,7 +58,6 @@ with col5:
     #st.write(canton_selection)
 
 # "You selected: ", product_selection
-
 
 
 filtered_df = merged_df.loc[(merged_df["product_name"]==product_selection) & (merged_df["canton"].isin(canton_selection))]
