@@ -55,7 +55,7 @@ client = bigquery.Client(credentials=credentials)
 
 # Uses st.cache_data to only rerun when the query changes or after 100 min.
 @st.cache_data(ttl=6000)
-def get_offer_df():
+def get_offers_df():
     query = "SELECT * FROM `farm-screener.farm_screener.offers`"
 
     offers_df = pandas_gbq.read_gbq(
@@ -74,7 +74,7 @@ def get_farms_df():
     return df
 
 
-df = get_offer_df()
+df = get_offers_df()
 farms_df = get_farms_df()
 
 

@@ -8,7 +8,7 @@ import folium
 from streamlit_folium import st_folium
 from google.oauth2 import service_account
 from google.cloud import bigquery
-from data import get_farms_df, get_offer_df, get_merged_df
+from data import get_farms_df, get_offers_df, get_merged_df
 
 cantons = [
     "AG",
@@ -50,7 +50,7 @@ cantons = [
 
 # # Uses st.cache_data to only rerun when the query changes or after 100 min.
 # @st.cache_data(ttl=6000)
-# def get_offer_df():
+# def get_offers_df():
 #     query = "SELECT * FROM `farm-screener.farm_screener.offers`"
 
 #     offers_df = pandas_gbq.read_gbq(
@@ -69,7 +69,7 @@ cantons = [
 #     return df
 
 
-df = get_offer_df()
+df = get_offers_df()
 farms_df = get_farms_df()
 
 
